@@ -8,6 +8,7 @@
                 <h2>{{$project->title}}</h2>
                 <h3>{{$project->slug}}</h3>
                 <p>{{$project->content}}</p>
+                <a href="{{ route('admin.projects.show',$project->slug) }}"><i class="fa-solid fa-eye"></i></a>
             </li>
             @endforeach
         </ul>

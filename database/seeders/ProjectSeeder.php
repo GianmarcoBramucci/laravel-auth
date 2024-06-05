@@ -30,7 +30,7 @@ class ProjectSeeder extends Seeder
                 $newProject = new Project();
                 $newProject->title = $row[0];
                 $newProject->content = $row[1];
-                $newProject->slug = $row[2];
+                $newProject->slug = Project::generateSlug($newProject->title);
                 $newProject->save();
             }
         }
