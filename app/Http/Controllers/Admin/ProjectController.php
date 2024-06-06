@@ -6,6 +6,7 @@ use App\Models\project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+
 class ProjectController extends Controller
 {
     /**
@@ -22,7 +23,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
@@ -30,7 +31,10 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $formData= $request->all();
+        $formData['slug']= project::generateSlug($formData['title']);
+        $newProject = project::create($formData);
+        return redirect()->route('admin.projects.index');
     }
 
     /**
@@ -46,7 +50,7 @@ class ProjectController extends Controller
      */
     public function edit(project $project)
     {
-        //
+        return view('admin.projects.edit',compact('project'));
     }
 
     /**
@@ -54,7 +58,12 @@ class ProjectController extends Controller
      */
     public function update(Request $request, project $project)
     {
-        //
+        $formData= $request->all();
+        if($project->title !== $formData['title']){
+            $formData['slug']= project::generateSlug($formData['title']);
+        }
+        $project->update($formData); 
+        return redirect()->route('admin.projects.index');
     }
 
     /**
@@ -62,6 +71,7 @@ class ProjectController extends Controller
      */
     public function destroy(project $project)
     {
-        //
+        $project->delete();
+        return redirect()->route('admin.projects.index') /*->with('message', $post->title . ' è stato eliminato')*/;
     }
 }
