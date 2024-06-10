@@ -16,17 +16,17 @@ class ProjectSeeder extends Seeder
     {
         $pathProjects = __DIR__ . "/projects.csv";
         $csvProjects = fopen($pathProjects, "r");
-
+    
         if ($csvProjects === false) {
             exit("Cannot open $pathProjects");
         }
-
-        $count= false;
+    
+        $count = false;
         while (($row = fgetcsv($csvProjects)) !== false) {
             if (!$count) {
                 $count = true;
-            }
-            else{
+            } 
+            else {
                 $newProject = new Project();
                 $newProject->title = $row[0];
                 $newProject->content = $row[1];
@@ -36,4 +36,5 @@ class ProjectSeeder extends Seeder
         }
         fclose($csvProjects);
     }
+    
 }

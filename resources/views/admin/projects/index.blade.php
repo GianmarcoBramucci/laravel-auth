@@ -11,6 +11,7 @@
                 <h2>{{$project->title}}</h2>
                 <h3>{{$project->slug}}</h3>
                 <p>{{$project->content}}</p>
+                <img src="{{asset('storage/'. $project->img)}}" alt="">
                 <a href="{{ route('admin.projects.show',$project->slug) }}"><i class="fa-solid fa-eye"></i></a>
                 <a href="{{ route('admin.projects.edit',$project->slug) }}"><i class="fa-solid fa-pen"></i></a>
                 <form action="{{route('admin.projects.destroy', $project->slug)}}" method="POST" class="d-inline-block">

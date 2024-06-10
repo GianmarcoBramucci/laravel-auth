@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class ProjectController extends Controller
@@ -14,7 +15,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects= project::all();
+        $projects = Project::all()->sortBy(function($project) {
+            return explode('-', $project->slug)[1]; 
+        });
         return view('admin.projects.index',compact('projects'));
     }
 
@@ -33,6 +36,10 @@ class ProjectController extends Controller
     {
         $formData= $request->all();
         $formData['slug']= project::generateSlug($formData['title']);
+        if($request->img){
+            $imgPath= Storage::put('ProjectsImg',$request->img);
+            $formData['img']= $imgPath;    
+            }
         $newProject = project::create($formData);
         return redirect()->route('admin.projects.index');
     }
@@ -62,6 +69,10 @@ class ProjectController extends Controller
         if($project->title !== $formData['title']){
             $formData['slug']= project::generateSlug($formData['title']);
         }
+        if($request->img){
+            $imgPath= Storage::put('ProjectsImg',$request->img);
+            $formData['img']= $imgPath;    
+            }
         $project->update($formData); 
         return redirect()->route('admin.projects.index');
     }
