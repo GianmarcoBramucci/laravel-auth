@@ -9,9 +9,32 @@ use Illuminate\Database\Eloquent\Model;
 class project extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'content', 'slug'];
+    protected $fillable = ['title','img','content', 'slug'];
     public static function generateSlug($title){
-        $slug = Str::slug($title, '-');
+        $slugBase = Str::slug(trim($title), '-');
+        $slugs = \App\Models\project::orderBy('slug')->pluck('slug')->toArray();
+        $num = 1;
+        $slugNumbers = [];
+        
+        foreach ($slugs as $slug) {
+            if (preg_match('/-(\d+)$/', $slug, $matches)) {
+                $slugNumbers[] = intval($matches[1]);
+            }
+        }
+
+        while (in_array($num, $slugNumbers)) {
+            $num++;
+        }
+
+        $slug = $slugBase . '-' . $num;
+
+        if(preg_match('/-(\d+)$/', $slugBase, $matches)){
+            if(!in_array($matches[1],$slugNumbers)){
+                $slug=$slugBase;   
+            }
+        }
         return $slug;
     }
 }
+
+
